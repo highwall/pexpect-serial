@@ -60,6 +60,8 @@ setup(
     package_data={
         '': ['README.md', 'LICENSE']
     },
-    packages=find_packages(exclude=('tests', 'docs'))
+    packages=find_packages(exclude=('tests', 'docs')),
+    install_requires=[
+        'pexpect'
+    ],
 )
-
