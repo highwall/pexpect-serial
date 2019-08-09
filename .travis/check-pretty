@@ -3,7 +3,7 @@ set -e -x -o pipefail
 
 setup()
 {
-    pip3 install flake8
+    pip3 install flake8 readme_renderer
 }
 
 check()
@@ -21,8 +21,10 @@ main()
             check
             ;;
         '')
-            setup
-            check
+            setup && check
+            ;;
+        *)
+            false
             ;;
     esac
 }
