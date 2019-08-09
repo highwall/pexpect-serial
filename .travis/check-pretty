@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e -x -o pipefail
+
+setup()
+{
+    pip3 install flake8
+}
+
+check()
+{
+    python3 -m flake8 --config=.flake8.cfg .
+}
+
+main()
+{
+    case $1 in
+        setup)
+            setup
+            ;;
+        check)
+            check
+            ;;
+        '')
+            setup
+            check
+            ;;
+    esac
+}
+
+main "$@"

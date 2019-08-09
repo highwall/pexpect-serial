@@ -57,11 +57,7 @@ setup(
     author_email='hiwall@126.com',
     url='https://github.com/highwall/pexpect-serial',
     license=license,
-    package_data={
-        '': ['README.md', 'LICENSE']
-    },
+    package_data={'': ['README.md', 'LICENSE']},
     packages=find_packages(exclude=('tests', 'docs')),
-    install_requires=[
-        'pexpect'
-    ],
+    install_requires=['pexpect'],
 )

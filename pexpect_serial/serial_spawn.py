@@ -1,4 +1,4 @@
-'''This is like pexpect, but it will work with serial port that you
+"""This is like pexpect, but it will work with serial port that you
 pass it. You are reponsible for opening and close the serial port.
 This allows you to use Pexpect with Serial port which pyserial supports.
 
@@ -19,20 +19,21 @@ PEXPECT LICENSE
     ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-'''
+"""
 
 from pexpect import spawn
 from pexpect.exceptions import ExceptionPexpect
 
 __all__ = ['SerialSpawn']
 
-class SerialSpawn(spawn):
-    '''Extends pexpect.spawn to support serial connections created with
-    pyserial.'''
 
-    def __init__ (self, ser, args=None, **kwargs):
-        '''This takes a serial of pyserial as input. Please make sure the serial is open
-        before creating SerialSpawn.'''
+class SerialSpawn(spawn):
+    """Extends pexpect.spawn to support serial connections created with
+    pyserial."""
+
+    def __init__(self, ser, args=None, **kwargs):
+        """This takes a serial of pyserial as input. Please make sure the serial is open
+        before creating SerialSpawn."""
 
         if not ser.isOpen():
             raise ExceptionPexpect('serial port is not ready')
@@ -43,7 +44,7 @@ class SerialSpawn(spawn):
         self.child_fd = ser.fileno()
         self.closed = False
 
-    def close (self):
+    def close(self):
         """Close the serial port.
 
         Calling this method a second time does nothing.
@@ -55,8 +56,8 @@ class SerialSpawn(spawn):
         self.ser.close()
         self.closed = True
 
-    def isalive (self):
-        '''This checks if the serial port is still valid.'''
+    def isalive(self):
+        """This checks if the serial port is still valid."""
         return self.ser.isOpen()
 
     def send(self, s):
@@ -66,6 +67,3 @@ class SerialSpawn(spawn):
 
         b = self._encoder.encode(s, final=False)
         return self.ser.write(b)
-
-    def kill(self, sig):
-        self.close()
