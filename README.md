@@ -8,12 +8,15 @@ This allows you to use Pexpect with Serial port which pyserial supports.
 Usage
 -----
 
+```python
     import serial
     from pexpect_serial import SerialSpawn
-    ser = serial.Serial('COM1', 115200)
-    ss = SerialSpawn(ser)
-    ss.sendline('start')
-    ss.expect('done')
+
+    with serial.Serial('COM1', 115200) as ser:
+        ss = SerialSpawn(ser)
+        ss.sendline('start')
+        ss.expect('done')
+```
 
 License
 -------
