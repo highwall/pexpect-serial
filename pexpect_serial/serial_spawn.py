@@ -21,31 +21,27 @@ PEXPECT LICENSE
 
 '''
 
-from pexpect.spawnbase import SpawnBase
+from pexpect import spawn
 from pexpect.exceptions import ExceptionPexpect
 
 __all__ = ['SerialSpawn']
 
-class SerialSpawn(SpawnBase):
-    '''This is like pexpect.spawn but allows you to supply a serial created by
+class SerialSpawn(spawn):
+    '''Extends pexpect.spawn to support serial connections created with
     pyserial.'''
 
-    def __init__ (self, ser, args=None, timeout=30, maxread=2000, searchwindowsize=None,
-                  logfile=None, encoding=None, codec_errors='strict'):
+    def __init__ (self, ser, args=None, **kwargs):
         '''This takes a serial of pyserial as input. Please make sure the serial is open
         before creating SerialSpawn.'''
 
-        self.ser = ser
         if not ser.isOpen():
             raise ExceptionPexpect('serial port is not ready')
 
-        self.args = None
-        self.command = None
-        SpawnBase.__init__(self, timeout, maxread, searchwindowsize, logfile,
-                           encoding=encoding, codec_errors=codec_errors)
-        self.own_fd = False
-        self.closed = False
+        super().__init__(None, **kwargs)
+        self.ser = ser
         self.name = '<serial port %s>' % ser.port
+        self.child_fd = ser.fileno()
+        self.closed = False
 
     def close (self):
         """Close the serial port.
@@ -63,12 +59,6 @@ class SerialSpawn(SpawnBase):
         '''This checks if the serial port is still valid.'''
         return self.ser.isOpen()
 
-    def read_nonblocking(self, size=1, timeout=None):
-        s = self.ser.read(size)
-        s = self._decoder.decode(s, final=False)
-        self._log(s, 'read')
-        return s
-
     def send(self, s):
         "Write to serial, return number of bytes written"
         s = self._coerce_send_string(s)
@@ -77,16 +67,5 @@ class SerialSpawn(SpawnBase):
         b = self._encoder.encode(s, final=False)
         return self.ser.write(b)
 
-    def sendline(self, s):
-        "Write to fd with trailing newline, return number of bytes written"
-        s = self._coerce_send_string(s)
-        return self.send(s + self.linesep)
-
-    def write(self, s):
-        "Write to serial, return None"
-        self.send(s)
-
-    def writelines(self, sequence):
-        "Call self.write() for each item in sequence"
-        for s in sequence:
-            self.write(s)
+    def kill(self, sig):
+        self.close()
