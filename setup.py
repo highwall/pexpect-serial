@@ -7,7 +7,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='pexpect-serial',
-    version='0.1.0',
+    version='0.1.0~vaisala0',
     author='High Wall',
     author_email='hiwall@126.com',
     description='pexpect with pyserial',
