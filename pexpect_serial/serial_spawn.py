@@ -38,7 +38,7 @@ class SerialSpawn(spawn):
         if not ser.isOpen():
             raise ExceptionPexpect('serial port is not ready')
 
-        super().__init__(None, **kwargs)
+        super(SerialSpawn, self).__init__(None, **kwargs)
         self.ser = ser
         self.name = '<serial port %s>' % ser.port
         self.child_fd = ser.fileno()
