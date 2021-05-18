@@ -21,7 +21,13 @@ PEXPECT LICENSE
 
 """
 
-from pexpect import spawn
+# pexpect.spawn is not supported on some systems (i.e. Windows(TM))
+# See https://pexpect.readthedocs.io/en/stable/overview.html#pexpect-on-windows for details.
+import os
+if os.name in ['nt']:
+    from pexpect.fdpexpect import fdspawn as spawn
+else:
+    from pexpect import spawn
 from pexpect.exceptions import ExceptionPexpect
 
 __all__ = ['SerialSpawn']
